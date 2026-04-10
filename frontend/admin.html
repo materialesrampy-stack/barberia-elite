@@ -455,11 +455,13 @@
 
     async function cambiarEstado(id, estado) {
         try {
-            await fetch(`https://barberia-elite-production.up.railway.app/api/turnos/${id}`, {
+            const res = await fetch(`https://barberia-elite-production.up.railway.app/api/turnos/${id}`, {
                 method: 'PATCH',
                 headers: authHeaders(),
                 body: JSON.stringify({ estado })
             });
+            const datos = await res.json();
+            console.log('respuesta patch:', datos);
             await cargarTurnos();
         } catch (err) {
             console.error(err);
