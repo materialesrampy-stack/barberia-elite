@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const pool = require('./database');
+const pool = require('../database');
 const nodemailer = require('nodemailer');
 const log = require('./logger');
 require('dotenv').config();
