@@ -289,13 +289,12 @@ router.patch('/:id', async (req, res) => {
         `
       };
 
-      transporter.sendMail(mailOptions, (err) => {
-        if (err) {
-          log(`ERROR mail - ${err.message}`);
-        } else {
+      try {
+          await transporter.sendMail(mailOptions);
           log(`Mail enviado a ${turno.email}`);
-        }
-      });
+      } catch (mailErr) {
+          log(`ERROR mail - ${mailErr.message} - code: ${mailErr.code}`);
+      }
     }
 
     res.json({ ok: true });
