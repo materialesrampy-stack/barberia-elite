@@ -245,13 +245,13 @@ router.patch('/:id', async (req, res) => {
   }
 
   const resultado = await pool.query(
-    'UPDATE turnos SET estado = $1 WHERE id = $2',
-    [estado, req.params.id]
-  );
+      'UPDATE turnos SET estado = $1 WHERE id = $2 RETURNING id',
+      [estado, req.params.id]
+    );
 
-  if (resultado.rowCount === 0) {
-    return res.status(404).json({ error: 'Turno no encontrado' });
-  }
+    if (resultado.rows.length === 0) {
+      return res.status(404).json({ error: 'Turno no encontrado' });
+    }
 
   log(`Turno ${req.params.id} cambiado a ${estado}`);
 
