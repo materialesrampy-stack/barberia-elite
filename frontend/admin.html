@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Barbería Elite</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+
+        .login-screen {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 320px;
+        }
+
+        .login-box h2 { margin-bottom: 20px; color: #111; }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background: #111;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .login-box button:hover { background: #333; }
+
+        .admin-screen { display: none; padding: 30px; }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .admin-header h1 { font-size: 22px; color: #111; }
+
+        .filtros {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filtros input, .filtros select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filtros button {
+            padding: 8px 16px;
+            background: #111;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        .stat-card .numero { font-size: 28px; font-weight: bold; }
+        .stat-card .label { font-size: 13px; color: #666; margin-top: 4px; }
+        .stat-card.pendiente .numero { color: #f59e0b; }
+        .stat-card.confirmado .numero { color: #10b981; }
+        .stat-card.cancelado .numero { color: #ef4444; }
+        .stat-card.total .numero { color: #111; }
+
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #111;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #fafafa; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .badge.pendiente { background: #fef3c7; color: #92400e; }
+        .badge.confirmado { background: #d1fae5; color: #065f46; }
+        .badge.cancelado { background: #fee2e2; color: #991b1b; }
+
+        .acciones { display: flex; gap: 6px; }
+
+        .btn-confirmar {
+            padding: 5px 10px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-cancelar {
+            padding: 5px 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-eliminar {
+            padding: 5px 10px;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-pendiente {
+            padding: 5px 10px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-confirmar:hover { background: #059669; }
+        .btn-cancelar:hover { background: #dc2626; }
+        .btn-eliminar:hover { background: #4b5563; }
+        .btn-pendiente:hover { background: #d97706; }
+
+        .sin-turnos {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 15px;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: none;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .logout-btn:hover { background: #f0f0f0; }
+
+        #modoToggle:checked + #modoSlider {
+            background: #10b981;
+        }
+
+        #modoSlider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        #modoToggle:checked + #modoSlider::before {
+            transform: translateX(18px);
+        }
+    </style>
+</head>
+<body>
+
+<!-- PANTALLA LOGIN -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-box">
+        <h2>✂️ Panel Admin</h2>
+        <p style="color:#666; margin-bottom:20px; font-size:14px;">Barbería Elite</p>
+        <input type="password" id="inputPassword" placeholder="Contraseña" />
+        <button type="button" onclick="login()">Ingresar</button>
+        <p id="loginError" style="color:red; margin-top:10px; font-size:13px;"></p>
+    </div>
+</div>
+
+<!-- PANTALLA ADMIN -->
+<div class="admin-screen" id="adminScreen">
+    <div class="admin-header">
+        <h1>✂️ Panel de Turnos</h1>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <div style="display:flex; align-items:center; gap:8px; background:white; padding:8px 14px; border-radius:8px; border:0.5px solid #ccc;">
+                <span style="font-size:13px; color:#666;">Confirmación:</span>
+                <span id="modoLabel" style="font-size:13px; font-weight:bold; color:#111;">Manual</span>
+                <label style="position:relative; display:inline-block; width:40px; height:22px; margin:0;">
+                    <input type="checkbox" id="modoToggle" onchange="cambiarModo()" style="opacity:0; width:0; height:0;">
+                    <span id="modoSlider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#ccc; border-radius:22px; transition:0.3s;"></span>
+                </label>
+            </div>
+            <button type="button" class="logout-btn" onclick="logout()">Cerrar sesión</button>
+        </div>
+    </div>
+
+    <div class="filtros">
+        <input type="date" id="filtroFecha" />
+        <select id="filtroEstado">
+            <option value="">Todos los estados</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="confirmado">Confirmado</option>
+            <option value="cancelado">Cancelado</option>
+        </select>
+        <button type="button" onclick="cargarTurnos()">Buscar</button>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card total">
+            <div class="numero" id="statTotal">0</div>
+            <div class="label">Total</div>
+        </div>
+        <div class="stat-card pendiente">
+            <div class="numero" id="statPendiente">0</div>
+            <div class="label">Pendientes</div>
+        </div>
+        <div class="stat-card confirmado">
+            <div class="numero" id="statConfirmado">0</div>
+            <div class="label">Confirmados</div>
+        </div>
+        <div class="stat-card cancelado">
+            <div class="numero" id="statCancelado">0</div>
+            <div class="label">Cancelados</div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Horario</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Servicio</th>
+                <th>Pago</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaTurnos">
+            <tr><td colspan="8" class="sin-turnos">Buscá una fecha para ver los turnos</td></tr>
+        </tbody>
+    </table>
+
+    <h2 style="margin-top:40px; margin-bottom:15px; font-size:18px; color:#111;">Clientes bloqueados</h2>
+
+    <div style="background:white; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.07); margin-bottom:20px;">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+            <input type="email" id="bloquearEmail" placeholder="Email" style="padding:8px 12px; border:1px solid #ccc; border-radius:8px; font-size:14px;">
+            <input type="tel" id="bloquearTelefono" placeholder="Teléfono" style="padding:8px 12px; border:1px solid #ccc; border-radius:8px; font-size:14px;">
+            <input type="text" id="bloquearMotivo" placeholder="Motivo (opcional)" style="padding:8px 12px; border:1px solid #ccc; border-radius:8px; font-size:14px; flex:1;">
+            <button type="button" onclick="bloquearCliente()" style="padding:8px 16px; background:#ef4444; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;">Bloquear</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Motivo</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaBloqueados">
+                <tr><td colspan="5" class="sin-turnos">No hay clientes bloqueados</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    let logueado = false;
+    let ultimaFecha = '';
+
+    function getToken() {
+        return sessionStorage.getItem('adminToken') || '';
+    }
+
+    function authHeaders() {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getToken()}`
+        };
+    }
+
+    function login() {
+        const input = document.getElementById('inputPassword').value;
+        if (!input) return;
+
+        fetch('https://barberia-elite-production.up.railway.app/api/turnos/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: input })
+        })
+        .then(res => res.json())
+        .then(datos => {
+            if (datos.token) {
+                sessionStorage.setItem('adminToken', datos.token);
+                logueado = true;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminScreen').style.display = 'block';
+                cargarTurnos();
+                cargarBloqueados();
+                cargarModo();
+            } else {
+                document.getElementById('loginError').textContent = 'Contraseña incorrecta';
+            }
+        })
+        .catch(() => {
+            document.getElementById('loginError').textContent = 'Error al conectar con el servidor';
+        });
+    }
+
+    function logout() {
+        sessionStorage.removeItem('adminToken');
+        logueado = false;
+        document.getElementById('loginScreen').style.display = 'flex';
+        document.getElementById('adminScreen').style.display = 'none';
+        document.getElementById('inputPassword').value = '';
+    }
+
+    async function cargarTurnos() {
+        const token = getToken();
+        if (!token) return false;
+
+        const inputFecha = document.getElementById('filtroFecha')?.value || '';
+        const fecha = inputFecha || ultimaFecha;
+        if (inputFecha) ultimaFecha = inputFecha;
+        const estado = document.getElementById('filtroEstado')?.value || '';
+
+        try {
+            const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/admin', {
+                method: 'POST',
+                headers: authHeaders(),
+                body: JSON.stringify({ fecha })
+            });
+
+            if (res.status === 401) {
+                logout();
+                return false;
+            }
+
+            const datos = await res.json();
+            let turnos = datos.turnos;
+            if (estado) turnos = turnos.filter(t => t.estado === estado);
+            actualizarStats(turnos);
+            renderTabla(turnos);
+            return true;
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+    }
+
+    function actualizarStats(turnos) {
+        document.getElementById('statTotal').textContent = turnos.length;
+        document.getElementById('statPendiente').textContent = turnos.filter(t => t.estado === 'pendiente').length;
+        document.getElementById('statConfirmado').textContent = turnos.filter(t => t.estado === 'confirmado').length;
+        document.getElementById('statCancelado').textContent = turnos.filter(t => t.estado === 'cancelado').length;
+    }
+
+    function renderTabla(turnos) {
+        const tbody = document.getElementById('tablaTurnos');
+        if (turnos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="sin-turnos">No hay turnos para mostrar</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = turnos.map(t => `
+            <tr id="fila-${t.id}">
+                <td>${formatFecha(t.fecha)}</td>
+                <td>${t.horario}</td>
+                <td>${t.nombre}</td>
+                <td>${t.telefono}</td>
+                <td>${t.servicio}</td>
+                <td>${t.pago}</td>
+                <td><span class="badge ${t.estado}">${t.estado}</span></td>
+                <td>
+                    <div class="acciones">
+                        ${t.estado !== 'confirmado' ? `<button type="button" class="btn-confirmar" onclick="cambiarEstado(${t.id}, 'confirmado')">Confirmar</button>` : ''}
+                        ${t.estado !== 'cancelado' ? `<button type="button" class="btn-cancelar" onclick="cambiarEstado(${t.id}, 'cancelado')">Cancelar</button>` : ''}
+                        ${t.estado !== 'pendiente' ? `<button type="button" class="btn-pendiente" onclick="cambiarEstado(${t.id}, 'pendiente')">Pendiente</button>` : ''}
+                        <button type="button" class="btn-eliminar" onclick="eliminarTurno(${t.id})">Eliminar</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function cambiarEstado(id, estado) {
+        try {
+            await fetch(`https://barberia-elite-production.up.railway.app/api/turnos/${id}`, {
+                method: 'PATCH',
+                headers: authHeaders(),
+                body: JSON.stringify({ estado })
+            });
+            await cargarTurnos();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function eliminarTurno(id) {
+        if (!confirm('¿Seguro que querés eliminar este turno?')) return;
+        try {
+            await fetch(`https://barberia-elite-production.up.railway.app/api/turnos/${id}`, {
+                method: 'DELETE',
+                headers: authHeaders()
+            });
+            await cargarTurnos();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function formatFecha(fecha) {
+        const [y, m, d] = fecha.split('-');
+        const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        return `${d} ${meses[parseInt(m)-1]} ${y}`;
+    }
+
+    async function cargarModo() {
+        try {
+            const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/modo');
+            const datos = await res.json();
+            const esAuto = datos.modo === 'automatico';
+            document.getElementById('modoToggle').checked = esAuto;
+            document.getElementById('modoLabel').textContent = esAuto ? 'Automático' : 'Manual';
+            document.getElementById('modoLabel').style.color = esAuto ? '#10b981' : '#111';
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function cambiarModo() {
+        const esAuto = document.getElementById('modoToggle').checked;
+        const modo = esAuto ? 'automatico' : 'manual';
+        document.getElementById('modoLabel').textContent = esAuto ? 'Automático' : 'Manual';
+        document.getElementById('modoLabel').style.color = esAuto ? '#10b981' : '#111';
+
+        await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/modo', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ modo })
+        });
+    }
+
+    async function cargarBloqueados() {
+        try {
+            const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/bloqueados/list', {
+                method: 'POST',
+                headers: authHeaders(),
+                body: JSON.stringify({})
+            });
+            const datos = await res.json();
+            const tbody = document.getElementById('tablaBloqueados');
+            if (!datos.bloqueados.length) {
+                tbody.innerHTML = '<tr><td colspan="5" class="sin-turnos">No hay clientes bloqueados</td></tr>';
+                return;
+            }
+            tbody.innerHTML = datos.bloqueados.map(b => `
+                <tr>
+                    <td>${b.email || '-'}</td>
+                    <td>${b.telefono || '-'}</td>
+                    <td>${b.motivo || '-'}</td>
+                    <td>${formatFecha(b.creado_en.split(' ')[0])}</td>
+                    <td><button type="button" class="btn-confirmar" onclick="desbloquear(${b.id})">Desbloquear</button></td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function bloquearCliente() {
+        const email = document.getElementById('bloquearEmail').value.trim();
+        const telefono = document.getElementById('bloquearTelefono').value.trim();
+        const motivo = document.getElementById('bloquearMotivo').value.trim();
+
+        if (!email && !telefono) {
+            alert('Ingresá al menos un email o teléfono');
+            return;
+        }
+
+        await fetch('https://barberia-elite-production.up.railway.app/api/turnos/bloqueados', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ email, telefono, motivo })
+        });
+
+        document.getElementById('bloquearEmail').value = '';
+        document.getElementById('bloquearTelefono').value = '';
+        document.getElementById('bloquearMotivo').value = '';
+        cargarBloqueados();
+    }
+
+    async function desbloquear(id) {
+        if (!confirm('¿Desbloquear este cliente?')) return;
+        await fetch(`https://barberia-elite-production.up.railway.app/api/turnos/bloqueados/${id}`, {
+            method: 'DELETE',
+            headers: authHeaders()
+        });
+        cargarBloqueados();
+    }
+
+    document.getElementById('inputPassword').addEventListener('keydown', e => {
+        if (e.key === 'Enter') login();
+    });
+
+    window.addEventListener('load', () => {
+        const savedToken = sessionStorage.getItem('adminToken');
+        if (savedToken) {
+            cargarTurnos().then(ok => {
+                if (ok) {
+                    logueado = true;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminScreen').style.display = 'block';
+                    cargarBloqueados();
+                    cargarModo();
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

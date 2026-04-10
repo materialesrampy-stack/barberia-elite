@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbería Elite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+
+<body>
+
+<a href="https://wa.me/543424861801?text=Hola%20Barber%C3%ADa%20Elite!%20Quiero%20hacer%20una%20consulta." class="whatsapp-float">
+    💬
+</a>
+
+<!-- NAVBAR -->
+<header class="navbar">
+    <h2>Barbería Elite</h2>
+    <nav>
+        <a href="#servicios">Servicios</a>
+        <a href="#about-us">Sobre Nosotros</a>
+        <a href="#promociones">Promociones</a>
+        <a href="https://wa.me/543424861801" class="cta">
+            Contacto
+        </a>
+    </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="overlay">
+        <h1>Estilo que habla por vos</h1>
+        <p>Cortes modernos y clásicos en Santa Fe</p>
+
+        <div class="hero-buttons">
+        <a href="https://wa.me/543424861801?text=Hola%20Barber%C3%ADa%20Elite!%20Quiero%20hacer%20una%20consulta." class="boton">
+            💬 Contactanos
+        </a>
+                <a href="#servicios" class="hero-btn">
+            🗓 Turnos Online
+        </a>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios" class="servicios">
+    <h2>Nuestros Servicios</h2>
+
+
+    <div class="grid">
+
+        <div class="card bg-card" style="background-image: url('https://images.unsplash.com/photo-1647140655214-e4a2d914971f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGJhcmJlcnNob3B8ZW58MHx8MHx8fDA%3D');">
+            <h3>Corte clásico</h3>
+            <p>Precisión y elegancia tradicional</p>
+
+            <button class="toggle-btn">Más info</button>
+            <div class="extra-info">
+                <p>Recomendamos reservar para asegurar tu horario preferido.</p>
+            </div>
+
+    <button class="reserve-btn">Reservar turno</button>
+
+    <!-- FORMULARIO DESPLEGABLE -->
+    <div class="reserve-form">
+        <label>Nombre:
+            <input type="text" name="nombre" placeholder="Ingresa nombre y apellido" required>
+        </label>
+        <label>Email:
+            <input type="email" name="email" placeholder="Ingresa correo electronico" required>
+        </label>
+        <label>Teléfono:
+            <div style="display:flex; align-items:center; gap:6px; margin-top:5px;">
+                <span style="background:#eee; padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-size:14px; white-space:nowrap;">+54 9</span>
+                <input type="tel" name="telefono" placeholder="Ej: 3424861801" style="margin-top:0;" required>
+            </div>
+        </label>
+
+        <label>Medio de pago:
+            <select class="pago">
+                <option value="Transferencia">Transferencia</option>
+                <option value="Efectivo">Efectivo</option>
+            </select>
+        </label>
+        <label>Notas adicionales:
+            <input type="text" class="notas" placeholder="(Opcional) Ej: Requiero lavado previo">
+        </label>
+
+
+        <label>Fecha:
+            <input type="date" name="fecha" required id="inputFecha">
+        </label>
+        <label>Horario:
+            <select name="horario" required>
+                <option value="">-- Elegí un horario --</option>
+                <option value="09:00">09:00</option>
+                <option value="09:30">09:30</option>
+                <option value="10:00">10:00</option>
+                <option value="10:30">10:30</option>
+                <option value="11:00">11:00</option>
+                <option value="11:30">11:30</option>
+                <option value="12:00">12:00</option>
+                <option value="12:30">12:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+                <option value="16:00">16:00</option>
+                <option value="16:30">16:30</option>
+                <option value="17:00">17:00</option>
+                <option value="17:30">17:30</option>
+            </select>
+        </label>
+
+
+        <!-- Botón enviar WhatsApp -->
+        <button class="send-wsp">Confirmar por WhatsApp</button>
+    </div>
+
+        </div>
+
+        <div class="card bg-card" style="background-image: url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8YmFyYmVyc2hvcHxlbnwwfHwwfHx8MA%3D%3D');">
+            <h3>Corte moderno</h3>
+            <p>Fades y estilos actuales</p>
+
+            <button class="toggle-btn">Más info</button>
+            <div class="extra-info">
+                <p>Consulta por estilos personalizados y asesoramiento para tu tipo de cabello.</p>
+            </div>
+
+            <button class="reserve-btn">Reservar turno</button>
+
+            <div class="reserve-form">
+                <label>Nombre:
+                    <input type="text" name="nombre" placeholder="Ingresa nombre y apellido" required>
+                </label>
+                <label>Email:
+                    <input type="email" name="email" placeholder="Ingresa correo electronico" required>
+                </label>
+                <label>Teléfono:
+                    <div style="display:flex; align-items:center; gap:6px; margin-top:5px;">
+                        <span style="background:#eee; padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-size:14px; white-space:nowrap;">+54</span>
+                        <input type="tel" name="telefono" placeholder="Ej: 3424861801" style="margin-top:0;" required>
+                    </div>
+                </label>
+                <label>Medio de pago:
+                    <select class="pago">
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </label>
+                <label>Notas adicionales:
+                    <input type="text" class="notas" placeholder="(Opcional) Ej: Requiero lavado previo">
+                </label>
+                <label>Fecha:
+                    <input type="date" name="fecha" required>
+                </label>
+                <label>Horario:
+                    <select name="horario" required>
+                        <option value="">-- Elegí un horario --</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                    </select>
+                </label>
+                <button class="send-wsp">Confirmar por WhatsApp</button>
+            </div>
+        </div>
+
+        <div class="card bg-card" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFyYmVyc2hvcHxlbnwwfHwwfHx8MA%3D%3D');">
+            <h3>Barba</h3>
+            <p>Perfilado profesional</p>
+
+            <button class="toggle-btn">Más info</button>
+            <div class="extra-info">
+                <p>Se incluye hidratación y perfilado con precisión. Ideal para mantener un estilo limpio y moderno.</p>
+            </div>
+
+            <button class="reserve-btn">Reservar turno</button>
+
+            <div class="reserve-form">
+                <label>Nombre:
+                    <input type="text" name="nombre" placeholder="Ingresa nombre y apellido" required>
+                </label>
+                <label>Email:
+                    <input type="email" name="email" placeholder="Ingresa correo electronico" required>
+                </label>
+                <label>Teléfono:
+                    <div style="display:flex; align-items:center; gap:6px; margin-top:5px;">
+                        <span style="background:#eee; padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-size:14px; white-space:nowrap;">+54</span>
+                        <input type="tel" name="telefono" placeholder="Ej: 3424861801" style="margin-top:0;" required>
+                    </div>
+                </label>
+                <label>Medio de pago:
+                    <select class="pago">
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </label>
+                <label>Notas adicionales:
+                    <input type="text" class="notas" placeholder="(Opcional) Ej: Requiero lavado previo">
+                </label>
+                <label>Fecha:
+                    <input type="date" name="fecha" required>
+                </label>
+                <label>Horario:
+                    <select name="horario" required>
+                        <option value="">-- Elegí un horario --</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                    </select>
+                </label>
+                <button class="send-wsp">Confirmar por WhatsApp</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- EXTRA -->
+<section class="info-extra">
+    <h2>Consejos para el cuidado del cabello</h2>
+    <ul>
+        <li>Lava tu cabello 2-3 veces por semana.</li>
+        <li>Usa productos recomendados según tu tipo de cabello.</li>
+        <li>Visita tu barbería cada 4-6 semanas para mantenimiento.</li>
+    </ul>
+</section>
+
+<!-- PROMO -->
+<section id="promociones" class="promo-animada">
+    <h2>¡Promoción del mes!</h2>
+    <p>Reserva tu turno online y obtené un 10% de descuento.</p>
+</section>
+
+<!-- CARRUSEL -->
+<section class="carousel">
+    <h2>Galería de cortes y estilos</h2>
+    <div class="carousel-container">
+    <div class="carousel-track">
+        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFyYmVyc2hvcHxlbnwwfHwwfHx8MA%3D%3D" alt="Imagen 1">
+        <img src="https://plus.unsplash.com/premium_photo-1658506711778-d56cdeae1b9b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFyYmVyc2hvcHxlbnwwfHwwfHx8MA%3D%3D" alt="Imagen 2">
+        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhcmJlcnNob3B8ZW58MHx8MHx8fDA%3D" alt="Imagen 3">
+        <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGJhcmJlcnNob3B8ZW58MHx8MHx8fDA%3D" alt="Imagen 4">
+        <!-- agregá más imágenes si querés -->
+        <!-- duplicamos para loop -->
+        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFyYmVyc2hvcHxlbnwwfHwwfHx8MA%3D%3D" alt="Imagen 1">
+        <img src="https://plus.unsplash.com/premium_photo-1658506711778-d56cdeae1b9b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YmFyYmVyc2hvcHxlbnwwfHwwfHx8MA%3D%3D" alt="Imagen 2">
+        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhcmJlcnNob3B8ZW58MHx8MHx8fDA%3D" alt="Imagen 3">
+        <img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGJhcmJlcnNob3B8ZW58MHx8MHx8fDA%3D" alt="Imagen 4">
+    </div>
+</div>
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section id="about-us" class="about-us-hero">
+  <h2>Sobre Nosotros</h2>
+  <p>
+    En <strong>Tu Barbería</strong> transformamos cada corte en una experiencia única.  
+    Combinamos técnicas modernas con estilo clásico, creando looks que reflejan tu personalidad.
+  </p>
+  <p>
+    Nuestro equipo está formado por profesionales apasionados, comprometidos con la calidad, precisión y el cuidado de cada cliente.  
+    Aquí no solo se trata de un corte de pelo, sino de un momento para relajarte y sentirte renovado.
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2026 Barbería Elite - Todos los derechos reservados</p>
+</footer>
+
+
+<!-- Tu script modular -->
+<script src="script.js"></script>
+
+</body>
+</html>
