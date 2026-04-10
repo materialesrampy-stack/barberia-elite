@@ -25,7 +25,7 @@ const adminLimiter = rateLimit({
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.use('/api/turnos/admin', adminLimiter);
 // app.use('/api/turnos', limiter);
