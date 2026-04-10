@@ -235,61 +235,74 @@ router.post('/', async (req, res) => {
   });
 });
 
-// PATCH /api/turnos/:id
 router.patch('/:id', async (req, res) => {
   if (!verificarToken(req, res)) return;
   const { estado } = req.body;
+
+  log(`PATCH recibido - id: ${req.params.id} - estado: ${estado}`);
 
   if (!['confirmado', 'cancelado', 'pendiente'].includes(estado)) {
     return res.status(400).json({ error: 'Estado inválido' });
   }
 
-  const resultado = await pool.query(
+  try {
+    const resultado = await pool.query(
       'UPDATE turnos SET estado = $1 WHERE id = $2 RETURNING id',
       [estado, req.params.id]
     );
+
+    log(`UPDATE ejecutado - rows: ${resultado.rows.length}`);
 
     if (resultado.rows.length === 0) {
       return res.status(404).json({ error: 'Turno no encontrado' });
     }
 
-  log(`Turno ${req.params.id} cambiado a ${estado}`);
+    log(`Turno ${req.params.id} cambiado a ${estado}`);
 
-  if (estado === 'confirmado') {
-    const { rows } = await pool.query('SELECT * FROM turnos WHERE id = $1', [req.params.id]);
-    const turno = rows[0];
-    log(`Intentando enviar mail a ${turno.email}`);
+    if (estado === 'confirmado') {
+      log(`Entrando al bloque de mail`);
+      const { rows } = await pool.query('SELECT * FROM turnos WHERE id = $1', [req.params.id]);
+      const turno = rows[0];
+      log(`Turno encontrado: ${turno?.email}`);
 
-    const token = crypto.createHmac('sha256', process.env.TOKEN_SECRET)
-      .update(`${turno.id}|${turno.email}`)
-      .digest('hex') + '.' + Buffer.from(`${turno.id}|${turno.email}`).toString('base64');
-    const linkCancelar = `${process.env.BASE_URL}/api/turnos/cancelar/${token}`;
+      const token = crypto.createHmac('sha256', process.env.TOKEN_SECRET)
+        .update(`${turno.id}|${turno.email}`)
+        .digest('hex') + '.' + Buffer.from(`${turno.id}|${turno.email}`).toString('base64');
+      const linkCancelar = `${process.env.BASE_URL}/api/turnos/cancelar/${token}`;
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: turno.email,
-      subject: '✅ Turno confirmado - Barbería Elite',
-      html: `
-        <h2>¡Tu turno está confirmado!</h2>
-        <p>Hola <strong>${turno.nombre}</strong>, tu reserva fue confirmada.</p>
-        <ul>
-          <li><strong>Servicio:</strong> ${turno.servicio}</li>
-          <li><strong>Fecha:</strong> ${turno.fecha}</li>
-          <li><strong>Horario:</strong> ${turno.horario}</li>
-          <li><strong>Pago:</strong> ${turno.pago}</li>
-        </ul>
-        <p>Si necesitás cancelar tu turno, hacé click acá:</p>
-        <a href="${linkCancelar}" style="background:#ef4444;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Cancelar turno</a>
-        <p style="margin-top:20px;">¡Te esperamos en Barbería Elite!</p>
-      `
-    };
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: turno.email,
+        subject: '✅ Turno confirmado - Barbería Elite',
+        html: `
+          <h2>¡Tu turno está confirmado!</h2>
+          <p>Hola <strong>${turno.nombre}</strong>, tu reserva fue confirmada.</p>
+          <ul>
+            <li><strong>Servicio:</strong> ${turno.servicio}</li>
+            <li><strong>Fecha:</strong> ${turno.fecha}</li>
+            <li><strong>Horario:</strong> ${turno.horario}</li>
+            <li><strong>Pago:</strong> ${turno.pago}</li>
+          </ul>
+          <p>Si necesitás cancelar tu turno, hacé click acá:</p>
+          <a href="${linkCancelar}" style="background:#ef4444;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Cancelar turno</a>
+          <p style="margin-top:20px;">¡Te esperamos en Barbería Elite!</p>
+        `
+      };
 
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) log(`ERROR mail - turno ${turno.id} - ${err.message}`);
-    });
+      transporter.sendMail(mailOptions, (err) => {
+        if (err) {
+          log(`ERROR mail - ${err.message}`);
+        } else {
+          log(`Mail enviado a ${turno.email}`);
+        }
+      });
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    log(`ERROR PATCH - ${err.message}`);
+    res.status(500).json({ error: 'Error interno' });
   }
-
-  res.json({ ok: true });
 });
 
 // DELETE /api/turnos/:id
