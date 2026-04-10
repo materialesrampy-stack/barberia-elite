@@ -256,9 +256,9 @@ router.patch('/:id', async (req, res) => {
   log(`Turno ${req.params.id} cambiado a ${estado}`);
 
   if (estado === 'confirmado') {
-    log(`Intentando enviar mail a ${turno.email}`);
     const { rows } = await pool.query('SELECT * FROM turnos WHERE id = $1', [req.params.id]);
     const turno = rows[0];
+    log(`Intentando enviar mail a ${turno.email}`);
 
     const token = crypto.createHmac('sha256', process.env.TOKEN_SECRET)
       .update(`${turno.id}|${turno.email}`)
