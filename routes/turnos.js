@@ -223,8 +223,9 @@ router.post('/', async (req, res) => {
     };
 
     transporter.sendMail(mailOptions, (err) => {
-      if (err) log(`ERROR mail - turno ${turno.id} - ${err.message}`);
+      if (err) log(`ERROR mail - ${err.message}`);
     });
+  }
 
   res.json({
     ok: true,
