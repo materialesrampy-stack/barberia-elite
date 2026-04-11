@@ -192,17 +192,33 @@ router.post('/', async (req, res) => {
 
   if (modoAuto) {
     const turno = resultado[0];
+
     const token = crypto.createHmac('sha256', process.env.TOKEN_SECRET)
       .update(`${turno.id}|${emailLimpio}`)
       .digest('hex') + '.' + Buffer.from(`${turno.id}|${emailLimpio}`).toString('base64');
+
     const linkCancelar = `${process.env.BASE_URL}/api/turnos/cancelar/${token}`;
+
+    const html = `
+      <h2>¡Tu turno está confirmado!</h2>
+      <p>Hola <strong>${nombreLimpio}</strong>, tu reserva fue confirmada.</p>
+      <ul>
+        <li><strong>Servicio:</strong> ${servicioLimpio}</li>
+        <li><strong>Fecha:</strong> ${fechaLimpia}</li>
+        <li><strong>Horario:</strong> ${horarioLimpio}</li>
+        <li><strong>Pago:</strong> ${pagoLimpio}</li>
+      </ul>
+      <p>Si necesitás cancelar tu turno, hacé click acá:</p>
+      <a href="${linkCancelar}" style="background:#ef4444;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Cancelar turno</a>
+      <p style="margin-top:20px;">¡Te esperamos en Barbería Elite!</p>
+    `;
 
     try {
       await resend.emails.send({
         from: 'onboarding@resend.dev',
-        to: emailLimpio,
+        to: 'materialesrampy@gmail.com', // 👈 IMPORTANTE para test
         subject: '✅ Turno confirmado - Barbería Elite',
-        html: mailOptions.html
+        html
       });
 
       console.log("MAIL AUTO ENVIADO CON RESEND");
