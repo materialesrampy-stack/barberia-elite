@@ -3,12 +3,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== Menu móvil =====
     const toggle = document.getElementById('menu-toggle');
     const nav = document.querySelector('.nav-links');
+    const overlay = document.getElementById('menu-overlay');
+
     if (toggle && nav) {
         toggle.addEventListener('click', () => {
             nav.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            nav.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                overlay.classList.remove('active');
+            });
         });
     }
-    
+
     // ===== Bloquear fechas anteriores a hoy =====
     const hoy = new Date().toISOString().split('T')[0];
     document.querySelectorAll('input[name="fecha"]').forEach(input => {
