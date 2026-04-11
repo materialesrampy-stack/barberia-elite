@@ -222,10 +222,12 @@ router.post('/', async (req, res) => {
       `
     };
 
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) log(`ERROR mail - ${err.message}`);
-    });
-  }
+    try {
+      await transporter.sendMail(mailOptions);
+      log(`Mail enviado a ${turno.email}`);
+    } catch (error) {
+      log(`ERROR MAIL COMPLETO - ${error.message} - code: ${error.code} - response: ${error.response}`);
+    }
 
   res.json({
     ok: true,
