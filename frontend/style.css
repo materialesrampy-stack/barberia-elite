@@ -19,41 +19,24 @@ body {
     padding: 20px 40px;
     background: #111;
     color: white;
+    position: relative;
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
 }
 
 .navbar a:hover {
     color: #25D366;
 }
 
-.nav-links {
-    align-items: center;
-}
-
 /* DESKTOP */
 .nav-links {
-    position: fixed;
-    top: 0;
-    right: -260px;
-    width: 250px;
-    height: 100vh;
-    background: #111;
-    flex-direction: column;
-    padding-top: 80px;
-    gap: 20px;
-    transition: right 0.3s ease;
     display: flex;
-    z-index: 9999;
-}
-
-.nav-links a {
-    padding: 12px 25px;
-    font-size: 18px;
-    border-bottom: 1px solid #222;
-    width: 100%;
-}
-
-.nav-links a:last-child {
-    border-bottom: none;
+    align-items: center;
+    gap: 20px;
 }
 
 .menu-toggle {
@@ -63,14 +46,6 @@ body {
     border: none;
     color: white;
     cursor: pointer;
-}
-
-.nav-links .cta {
-    margin: 10px 25px;
-    width: auto;
-    text-align: center;
-    border-radius: 8px;
-    border-bottom: none;
 }
 
 /* MOBILE */
@@ -88,14 +63,39 @@ body {
         height: 100vh;
         background: #111;
         flex-direction: column;
+        align-items: flex-start;
         padding-top: 80px;
-        gap: 20px;
+        gap: 0;
         transition: right 0.3s ease;
-        display: flex;
+        z-index: 9999;
     }
 
     .nav-links.active {
         right: 0;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        padding: 14px 25px;
+        font-size: 18px;
+        border-bottom: 1px solid #222;
+        width: 100%;
+        display: block;
+    }
+
+    .nav-links a:last-child {
+        border-bottom: none;
+    }
+
+    .nav-links .cta {
+        background: #25D366;
+        margin: 15px 25px;
+        width: calc(100% - 50px);
+        text-align: center;
+        border-radius: 8px;
+        border-bottom: none;
+        padding: 10px 15px;
     }
 }
 
@@ -113,6 +113,7 @@ body {
 .menu-overlay.active {
     display: block;
 }
+
 
 /* HERO */
 .hero {
