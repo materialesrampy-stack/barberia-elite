@@ -8,9 +8,6 @@ const nodemailer = require('nodemailer');
 const log = require('../logger');
 require('dotenv').config();
 
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "OK" : "NO");
-
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -258,7 +255,11 @@ router.patch('/:id', async (req, res) => {
 
   log(`Turno ${req.params.id} cambiado a ${estado}`);
 
-  if (estado === 'confirmado') {
+  const estadoNormalizado = estado?.toLowerCase().trim();
+  
+  console.log("ESTADO RECIBIDO:", estado);
+
+  if (estadoNormalizado === 'confirmado') {
     const { rows } = await pool.query('SELECT * FROM turnos WHERE id = $1', [req.params.id]);
     const turno = rows[0];
 
