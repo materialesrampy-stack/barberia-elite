@@ -4,18 +4,12 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 const pool = require('../database');
-const nodemailer = require('nodemailer');
 const log = require('../logger');
 require('dotenv').config();
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  },
-  family: 4
-});
+
 
 function verificarToken(req, res) {
     const token = req.headers['authorization']?.replace('Bearer ', '');
@@ -203,28 +197,18 @@ router.post('/', async (req, res) => {
       .digest('hex') + '.' + Buffer.from(`${turno.id}|${emailLimpio}`).toString('base64');
     const linkCancelar = `${process.env.BASE_URL}/api/turnos/cancelar/${token}`;
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: emailLimpio,
-      subject: '✅ Turno confirmado - Barbería Elite',
-      html: `
-        <h2>¡Tu turno está confirmado!</h2>
-        <p>Hola <strong>${nombreLimpio}</strong>, tu reserva fue confirmada.</p>
-        <ul>
-          <li><strong>Servicio:</strong> ${servicioLimpio}</li>
-          <li><strong>Fecha:</strong> ${fechaLimpia}</li>
-          <li><strong>Horario:</strong> ${horarioLimpio}</li>
-          <li><strong>Pago:</strong> ${pagoLimpio}</li>
-        </ul>
-        <p>Si necesitás cancelar tu turno, hacé click acá:</p>
-        <a href="${linkCancelar}" style="background:#ef4444;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:bold;">Cancelar turno</a>
-        <p style="margin-top:20px;">¡Te esperamos en Barbería Elite!</p>
-      `
-    };
+    try {
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: emailLimpio,
+        subject: '✅ Turno confirmado - Barbería Elite',
+        html: mailOptions.html
+      });
 
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) log(`ERROR mail - ${err.message}`);
-    });
+      console.log("MAIL AUTO ENVIADO CON RESEND");
+    } catch (error) {
+      console.error("ERROR MAIL AUTO:", error);
+    }
   }
 
   res.json({
@@ -256,7 +240,7 @@ router.patch('/:id', async (req, res) => {
   log(`Turno ${req.params.id} cambiado a ${estado}`);
 
   const estadoNormalizado = estado?.toLowerCase().trim();
-  
+
   console.log("ESTADO RECIBIDO:", estado);
 
   if (estadoNormalizado === 'confirmado') {
@@ -288,8 +272,14 @@ router.patch('/:id', async (req, res) => {
     };
 
     try {
-      await transporter.sendMail(mailOptions);
-      console.log("MAIL ENVIADO");
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: turno.email,
+        subject: '✅ Turno confirmado - Barbería Elite',
+        html: mailOptions.html
+      });
+
+      console.log("MAIL ENVIADO CON RESEND");
     } catch (error) {
       console.error("ERROR MAIL:", error);
     }
