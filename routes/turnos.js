@@ -283,9 +283,12 @@ router.patch('/:id', async (req, res) => {
       `
     };
 
-    transporter.sendMail(mailOptions, (err) => {
-      if (err) log(`ERROR mail - turno ${turno.id} - ${err.message}`);
-    });
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("MAIL ENVIADO");
+    } catch (error) {
+      console.error("ERROR MAIL:", error);
+    }
   }
 
   res.json({ ok: true });
