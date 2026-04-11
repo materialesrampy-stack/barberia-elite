@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ===== Menu móvil =====
+    const toggle = document.getElementById('menu-toggle');
+    const nav = document.querySelector('.nav-links');
+    if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+    }
+    
     // ===== Bloquear fechas anteriores a hoy =====
     const hoy = new Date().toISOString().split('T')[0];
     document.querySelectorAll('input[name="fecha"]').forEach(input => {
@@ -165,15 +174,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const toggle = document.getElementById("menu-toggle");
-        const nav = document.querySelector(".nav-links");
-
-        toggle.addEventListener("click", () => {
-            nav.classList.toggle("active");
-        });
-    });
-
 
 });
