@@ -110,12 +110,13 @@ body {
     background: rgba(0,0,0,0);
     z-index: 1500;
     pointer-events: none;
-    transition: background 0.5s ease 0.1s;
+    transition: background 0s;
 }
 
 .menu-overlay.active {
     background: rgba(0,0,0,0.5);
     pointer-events: all;
+    transition: background 0.5s ease 0.1s;
 }
 
 
