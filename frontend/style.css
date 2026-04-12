@@ -553,6 +553,7 @@ body {
 .carousel-track {
   display: flex;
   gap: 10px;
+  width: max-content;
   animation: scroll 25s linear infinite;
 }
 
@@ -563,16 +564,23 @@ body {
 }
 
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+    .carousel-track img {
+        height: 180px;
+        width: 260px;
+    }
 }
 
 .carousel-track img {
-  height: 300px;
-  width: 400px;
-  object-fit: cover;
-  border-radius: 8px;
-  flex-shrink: 0;
+    height: 250px;
+    width: 350px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
 }
 
 
