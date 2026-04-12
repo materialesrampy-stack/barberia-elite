@@ -98,6 +98,11 @@ body {
         border-bottom: none;
         padding: 10px 15px;
     }
+
+    .carousel-track img {
+        height: 200px;
+        width: 280px;
+    }
 }
 
 .menu-overlay {
@@ -551,8 +556,10 @@ body {
   animation: scroll 25s linear infinite;
 }
 
-.carousel-track:hover {
-  animation-play-state: paused;
+@media (hover: hover) {
+    .carousel-track:hover {
+        animation-play-state: paused;
+    }
 }
 
 @keyframes scroll {
