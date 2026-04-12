@@ -169,7 +169,7 @@ router.post('/', async (req, res) => {
   }
 
   const ahora = new Date();
-  const fechaHoraTurno = new Date(`${fechaLimpia}T${horarioLimpio}:00`);
+  const fechaHoraTurno = new Date(`${fechaLimpia}T${horarioLimpio}:00-03:00`);
   const diferenciaHoras = (fechaHoraTurno - ahora) / (1000 * 60 * 60);
 
   if (diferenciaHoras < 1) {
