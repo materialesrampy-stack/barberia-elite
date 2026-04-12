@@ -244,16 +244,25 @@
 </div>
 
 <!-- PANTALLA ADMIN -->
+<!-- PANTALLA ADMIN -->
 <div class="admin-screen" id="adminScreen">
     <div class="admin-header">
         <h1>✂️ Panel de Turnos</h1>
-        <div style="display:flex; align-items:center; gap:15px;">
+        <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
             <div style="display:flex; align-items:center; gap:8px; background:white; padding:8px 14px; border-radius:8px; border:0.5px solid #ccc;">
                 <span style="font-size:13px; color:#666;">Confirmación:</span>
                 <span id="modoLabel" style="font-size:13px; font-weight:bold; color:#111;">Manual</span>
                 <label style="position:relative; display:inline-block; width:40px; height:22px; margin:0;">
                     <input type="checkbox" id="modoToggle" onchange="cambiarModo()" style="opacity:0; width:0; height:0;">
                     <span id="modoSlider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#ccc; border-radius:22px; transition:0.3s;"></span>
+                </label>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; background:white; padding:8px 14px; border-radius:8px; border:0.5px solid #ccc;">
+                <span style="font-size:13px; color:#666;">Notif. dueño:</span>
+                <span id="notifLabel" style="font-size:13px; font-weight:bold; color:#111;">Activo</span>
+                <label style="position:relative; display:inline-block; width:40px; height:22px; margin:0;">
+                    <input type="checkbox" id="notifToggle" onchange="cambiarNotif()" style="opacity:0; width:0; height:0;">
+                    <span id="notifSlider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#ccc; border-radius:22px; transition:0.3s;"></span>
                 </label>
             </div>
             <button type="button" class="logout-btn" onclick="logout()">Cerrar sesión</button>
@@ -508,6 +517,33 @@
             method: 'POST',
             headers: authHeaders(),
             body: JSON.stringify({ modo })
+        });
+    }
+
+    async function cargarNotif() {
+        try {
+            const res = await fetch('/api/turnos/config/notif');
+            const datos = await res.json();
+            const esActivo = datos.notif === 'activo';
+            document.getElementById('notifToggle').checked = esActivo;
+            document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
+            document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
+            document.getElementById('notifSlider').style.background = esActivo ? '#10b981' : '#ccc';
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function cambiarNotif() {
+        const esActivo = document.getElementById('notifToggle').checked;
+        const notif = esActivo ? 'activo' : 'inactivo';
+        document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
+        document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
+
+        await fetch('/api/turnos/config/notif', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ notif })
         });
     }
 

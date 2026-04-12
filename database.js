@@ -39,13 +39,21 @@ async function initDB() {
         )
     `);
 
-    const { rows } = await pool.query(
-        "SELECT * FROM configuracion WHERE clave = 'modo_confirmacion'"
-    );
-    if (rows.length === 0) {
-        await pool.query(
-            "INSERT INTO configuracion (clave, valor) VALUES ('modo_confirmacion', 'manual')"
+    const configs = [
+        { clave: 'modo_confirmacion', valor: 'manual' },
+        { clave: 'notif_dueno', valor: 'activo' }
+    ];
+
+    for (const config of configs) {
+        const { rows } = await pool.query(
+            "SELECT * FROM configuracion WHERE clave = $1", [config.clave]
         );
+        if (rows.length === 0) {
+            await pool.query(
+                "INSERT INTO configuracion (clave, valor) VALUES ($1, $2)",
+                [config.clave, config.valor]
+            );
+        }
     }
 }
 

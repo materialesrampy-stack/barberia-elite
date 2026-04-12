@@ -190,6 +190,36 @@ router.post('/', async (req, res) => {
 
   log(`Turno creado - ${fechaLimpia} ${horarioLimpio} - ${nombreLimpio} - ${servicioLimpio} - modo: ${estadoInicial}`);
 
+  const { rows: configNotif } = await pool.query(
+      "SELECT valor FROM configuracion WHERE clave = 'notif_dueno'"
+  );
+  if (configNotif[0]?.valor === 'activo') {
+      try {
+          await resend.emails.send({
+              from: 'onboarding@resend.dev',
+              to: process.env.EMAIL_DUENO,
+              subject: '🔔 Nuevo turno solicitado - Barbería Elite',
+              html: `
+                  <h2>Nuevo turno solicitado</h2>
+                  <ul>
+                      <li><strong>Nombre:</strong> ${nombreLimpio}</li>
+                      <li><strong>Servicio:</strong> ${servicioLimpio}</li>
+                      <li><strong>Fecha:</strong> ${fechaLimpia}</li>
+                      <li><strong>Horario:</strong> ${horarioLimpio}</li>
+                      <li><strong>Teléfono:</strong> ${telefonoLimpio}</li>
+                      <li><strong>Pago:</strong> ${pagoLimpio}</li>
+                      <li><strong>Notas:</strong> ${notasLimpio || 'Sin notas'}</li>
+                  </ul>
+                  <p>Entrá al panel admin para confirmar o cancelar el turno.</p>
+              `
+          });
+          log(`Notificación enviada al dueño`);
+      } catch (error) {
+          log(`ERROR notif dueño - ${error.message}`);
+      }
+  }
+
+
   if (modoAuto) {
     const turno = resultado[0];
 
