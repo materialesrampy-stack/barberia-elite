@@ -173,13 +173,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ===== Carrusel =====
-        const track = document.querySelector('.carousel-track');
+// ===== Carrusel =====
+    const track = document.querySelector('.carousel-track');
+    if (track) {
+        let position = 0;
+        const speed = 0.5;
+        let isHovered = false;
+
+        const isTouchDevice = ('ontouchstart' in window);
+
+        if (!isTouchDevice) {
+            track.addEventListener('mouseenter', () => isHovered = true);
+            track.addEventListener('mouseleave', () => isHovered = false);
+        }
+
+        function animate() {
+            if (!isHovered) {
+                position -= speed;
+                const totalWidth = track.scrollWidth / 2;
+                if (Math.abs(position) >= totalWidth) {
+                    position = 0;
+                }
+                track.style.transform = `translateX(${position}px)`;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
-        const offset = 100; // espacio desde arriba
+        const offset = 100;
         const bodyRect = document.body.getBoundingClientRect().top;
         const targetRect = target.getBoundingClientRect().top;
         const targetPos = targetRect - bodyRect - offset;

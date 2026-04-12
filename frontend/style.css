@@ -545,34 +545,15 @@ body {
 }
 
 .carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 
 .carousel-track {
-  display: flex;
-  gap: 10px;
-  width: max-content;
-  animation: scroll 25s linear infinite;
-}
-
-@media (hover: hover) {
-    .carousel-track:hover {
-        animation-play-state: paused;
-    }
-}
-
-@keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-@media (max-width: 768px) {
-    .carousel-track img {
-        height: 180px;
-        width: 260px;
-    }
+    display: flex;
+    gap: 10px;
+    will-change: transform;
 }
 
 .carousel-track img {
@@ -583,7 +564,12 @@ body {
     flex-shrink: 0;
 }
 
-
+@media (max-width: 768px) {
+    .carousel-track img {
+        height: 180px;
+        width: 260px;
+    }
+}
 
 
 
