@@ -228,6 +228,86 @@
         #modoToggle:checked + #modoSlider::before {
             transform: translateX(18px);
         }
+
+        @media (max-width: 768px) {
+
+            .admin-screen {
+                padding: 15px;
+            }
+
+            /* HEADER EN COLUMNA */
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .admin-header h1 {
+                font-size: 20px;
+            }
+
+            /* CONTROLES (toggles + logout) */
+            .admin-header > div {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .admin-header > div > div {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .logout-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* FILTROS */
+            .filtros {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filtros input,
+            .filtros select,
+            .filtros button {
+                width: 100%;
+            }
+
+            /* STATS (2 columnas) */
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            /* TABLA → SCROLL HORIZONTAL */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            /* BOTONES DE ACCIONES */
+            .acciones {
+                flex-direction: column;
+            }
+
+            .acciones button {
+                width: 100%;
+            }
+
+            /* BLOQUEADOS FORM */
+            .admin-screen input,
+            .admin-screen button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
