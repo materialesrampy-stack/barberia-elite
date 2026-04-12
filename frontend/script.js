@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ===== Botones WhatsApp — ahora con backend =====
+    // ===== Botones WhatsApp — con backend =====
     const sendWspButtons = document.querySelectorAll('.send-wsp');
     sendWspButtons.forEach(btn => {
         btn.addEventListener('click', async () => {
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Abrir WhatsApp con los datos
-                window.open(datos.whatsapp, '_blank');
+                window.location.href = datos.whatsapp;
                 alert('✅ Turno reservado!\n\nRecibirás un mail de confirmación una vez que verifiquemos tu pago (transferencia) o confirmemos tu pedido.\n\n¡Gracias!');
                 form.classList.remove('show');
                 form.querySelectorAll('input').forEach(i => i.value = '');

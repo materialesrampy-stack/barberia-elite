@@ -173,7 +173,7 @@ router.post('/', async (req, res) => {
   const diferenciaHoras = (fechaHoraTurno - ahora) / (1000 * 60 * 60);
 
   if (diferenciaHoras < 1) {
-    return res.status(400).json({ error: 'El turno debe reservarse con al menos 1 hora de antelación.' });
+    return res.status(400).json({ error: 'El turno debe reservarse con al menos 1 hora de antelación. Por favor seleccioná otra fecha y/o horario.' });
   }
 
   const { rows: config } = await pool.query(
