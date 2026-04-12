@@ -152,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('✅ Turno reservado!\n\nRecibirás un mail de confirmación una vez que verifiquemos tu pago (transferencia) o confirmemos tu pedido.\n\n¡Gracias!');
                 form.classList.remove('show');
                 form.querySelectorAll('input').forEach(i => i.value = '');
+                form.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                btn.textContent = 'Confirmar por WhatsApp';
+                btn.disabled = false;
 
             } catch (err) {
                 alert('No se pudo conectar con el servidor. ¿Está corriendo node server.js?');
