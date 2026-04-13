@@ -634,9 +634,12 @@
 
     async function cargarNotif() {
         try {
-            const res = await fetch('/api/turnos/config/notif');
+            const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif');
             const datos = await res.json();
-            actualizarUINotif(datos.notif === 'activo');
+            const esActivo = datos.notif === 'activo';
+            document.getElementById('notifToggle').checked = esActivo;
+            document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
+            document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
         } catch (err) {
             console.error(err);
         }
@@ -645,9 +648,10 @@
     async function cambiarNotif() {
         const esActivo = document.getElementById('notifToggle').checked;
         const notif = esActivo ? 'activo' : 'inactivo';
-        actualizarUINotif(esActivo);
+        document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
+        document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
 
-        await fetch('/api/turnos/config/notif', {
+        await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif', {
             method: 'POST',
             headers: authHeaders(),
             body: JSON.stringify({ notif })
@@ -724,8 +728,6 @@
                     logueado = true;
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('adminScreen').style.display = 'block';
-                    cargarBloqueados();
-                    cargarModo();
                     cargarBloqueados();
                     cargarModo();
                     cargarNotif();
