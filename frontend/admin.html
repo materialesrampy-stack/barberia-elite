@@ -243,6 +243,7 @@
             background: white;
             border-radius: 50%;
             transition: 0.3s;
+            transform: translateX(var(--translate, 0px));
         }
 
         #notifToggle:checked + #notifSlider::before {
@@ -620,19 +621,22 @@
         });
     }
 
+    function actualizarUINotif(esActivo) {
+        const toggle = document.getElementById('notifToggle');
+        const label = document.getElementById('notifLabel');
+        const slider = document.getElementById('notifSlider');
+        toggle.checked = esActivo;
+        label.textContent = esActivo ? 'Activo' : 'Inactivo';
+        label.style.color = esActivo ? '#10b981' : '#ef4444';
+        slider.style.background = esActivo ? '#10b981' : '#ccc';
+        slider.style.setProperty('--translate', esActivo ? '18px' : '0px');
+    }
+
     async function cargarNotif() {
         try {
             const res = await fetch('/api/turnos/config/notif');
             const datos = await res.json();
-            const esActivo = datos.notif === 'activo';
-            const toggle = document.getElementById('notifToggle');
-            const label = document.getElementById('notifLabel');
-            const slider = document.getElementById('notifSlider');
-            
-            toggle.checked = esActivo;
-            label.textContent = esActivo ? 'Activo' : 'Inactivo';
-            label.style.color = esActivo ? '#10b981' : '#ef4444';
-            slider.style.background = esActivo ? '#10b981' : '#ccc';
+            actualizarUINotif(datos.notif === 'activo');
         } catch (err) {
             console.error(err);
         }
@@ -641,8 +645,7 @@
     async function cambiarNotif() {
         const esActivo = document.getElementById('notifToggle').checked;
         const notif = esActivo ? 'activo' : 'inactivo';
-        document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
-        document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
+        actualizarUINotif(esActivo);
 
         await fetch('/api/turnos/config/notif', {
             method: 'POST',
