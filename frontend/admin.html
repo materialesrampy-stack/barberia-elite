@@ -229,42 +229,6 @@
             transform: translateX(18px);
         }
 
-        #notifSlider {
-            background: #ccc;
-        }
-
-        #notifSlider::before {
-            content: '';
-            position: absolute;
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s;
-            transform: translateX(0);
-        }
-
-        #notifToggle:checked + #notifSlider {
-            background: #10b981;
-        }
-
-        #notifSlider::before {
-            content: '';
-            position: absolute;
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s;
-        }
-
-        #notifToggle:checked + #notifSlider::before {
-            transform: translateX(18px);
-        }
 
         @media (max-width: 768px) {
 
@@ -376,11 +340,10 @@
             </div>
             <div style="display:flex; align-items:center; gap:8px; background:white; padding:8px 14px; border-radius:8px; border:0.5px solid #ccc;">
                 <span style="font-size:13px; color:#666;">Notif. dueño:</span>
-                <span id="notifLabel" style="font-size:13px; font-weight:bold; color:#111;">Activo</span>
-                <label style="position:relative; display:inline-block; width:40px; height:22px; margin:0;">
-                    <input type="checkbox" id="notifToggle" onchange="cambiarNotif()" style="opacity:0; width:0; height:0;">
-                    <span id="notifSlider" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#ccc; border-radius:22px; transition:0.3s;"></span>
-                </label>
+                <span id="notifLabel" style="font-size:13px; font-weight:bold; color:#10b981;">Activo</span>
+                <div id="notifSliderContainer" onclick="cambiarNotif()" style="position:relative; width:40px; height:22px; background:#10b981; border-radius:22px; cursor:pointer; transition:background 0.3s;">
+                    <div id="notifBolita" style="position:absolute; width:16px; height:16px; background:white; border-radius:50%; top:3px; left:21px; transition:left 0.3s;"></div>
+                </div>
             </div>
             <button type="button" class="logout-btn" onclick="logout()">Cerrar sesión</button>
         </div>
@@ -644,32 +607,35 @@
         });
     }
 
-    function actualizarUINotif(esActivo) {
-        const toggle = document.getElementById('notifToggle');
-        const label = document.getElementById('notifLabel');
-
-        toggle.checked = esActivo;
-
-        label.textContent = esActivo ? 'Activo' : 'Inactivo';
-        label.style.color = esActivo ? '#10b981' : '#ef4444';
+    async function cargarNotif() {
+        try {
+            const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif');
+            const datos = await res.json();
+            setNotifUI(datos.notif === 'activo');
+        } catch (err) {
+            console.error(err);
+        }
     }
 
-    async function cargarNotif() {
-        const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif');
-        const datos = await res.json();
-        actualizarUINotif(datos.notif === 'activo');
+    function setNotifUI(esActivo) {
+        document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
+        document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
+        document.getElementById('notifSliderContainer').style.background = esActivo ? '#10b981' : '#ccc';
+        document.getElementById('notifBolita').style.left = esActivo ? '21px' : '3px';
     }
 
     async function cambiarNotif() {
-        const toggle = document.getElementById('notifToggle');
-        const esActivo = toggle.checked;
-
-        actualizarUINotif(esActivo);
+        const label = document.getElementById('notifLabel');
+        const esActivo = label.textContent === 'Activo';
+        const nuevoEstado = !esActivo;
+        const notif = nuevoEstado ? 'activo' : 'inactivo';
+        
+        setNotifUI(nuevoEstado);
 
         await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif', {
             method: 'POST',
             headers: authHeaders(),
-            body: JSON.stringify({ notif: esActivo ? 'activo' : 'inactivo' })
+            body: JSON.stringify({ notif })
         });
     }
 
