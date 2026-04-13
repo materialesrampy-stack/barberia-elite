@@ -625,10 +625,14 @@
             const res = await fetch('/api/turnos/config/notif');
             const datos = await res.json();
             const esActivo = datos.notif === 'activo';
-            document.getElementById('notifToggle').checked = esActivo;
-            document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
-            document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
-            document.getElementById('notifSlider').style.background = esActivo ? '#10b981' : '#ccc';
+            const toggle = document.getElementById('notifToggle');
+            const label = document.getElementById('notifLabel');
+            const slider = document.getElementById('notifSlider');
+            
+            toggle.checked = esActivo;
+            label.textContent = esActivo ? 'Activo' : 'Inactivo';
+            label.style.color = esActivo ? '#10b981' : '#ef4444';
+            slider.style.background = esActivo ? '#10b981' : '#ccc';
         } catch (err) {
             console.error(err);
         }
