@@ -233,10 +233,6 @@
             background: #ccc;
         }
 
-        #notifSlider.active {
-            background: #10b981;
-        }
-
         #notifSlider::before {
             content: '';
             position: absolute;
@@ -250,7 +246,23 @@
             transform: translateX(0);
         }
 
-        #notifSlider.active::before {
+        #notifToggle:checked + #notifSlider {
+            background: #10b981;
+        }
+
+        #notifSlider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        #notifToggle:checked + #notifSlider::before {
             transform: translateX(18px);
         }
 
@@ -635,14 +647,11 @@
     function actualizarUINotif(esActivo) {
         const toggle = document.getElementById('notifToggle');
         const label = document.getElementById('notifLabel');
-        const slider = document.getElementById('notifSlider');
 
         toggle.checked = esActivo;
 
         label.textContent = esActivo ? 'Activo' : 'Inactivo';
         label.style.color = esActivo ? '#10b981' : '#ef4444';
-
-        slider.classList.toggle('active', esActivo);
     }
 
     async function cargarNotif() {
