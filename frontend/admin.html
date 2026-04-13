@@ -229,6 +229,26 @@
             transform: translateX(18px);
         }
 
+        #notifToggle:checked + #notifSlider {
+            background: #10b981;
+        }
+
+        #notifSlider::before {
+            content: '';
+            position: absolute;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        #notifToggle:checked + #notifSlider::before {
+            transform: translateX(18px);
+        }
+
         @media (max-width: 768px) {
 
             .admin-screen {
@@ -699,6 +719,9 @@
                     document.getElementById('adminScreen').style.display = 'block';
                     cargarBloqueados();
                     cargarModo();
+                    cargarBloqueados();
+                    cargarModo();
+                    cargarNotif();
                 }
             });
         }
