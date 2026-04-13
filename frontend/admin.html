@@ -243,7 +243,6 @@
             background: white;
             border-radius: 50%;
             transition: 0.3s;
-            transform: translateX(var(--translate, 0px));
         }
 
         #notifToggle:checked + #notifSlider::before {
@@ -638,9 +637,16 @@
             const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif');
             const datos = await res.json();
             const esActivo = datos.notif === 'activo';
-            document.getElementById('notifToggle').checked = esActivo;
-            document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
-            document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
+
+            const toggle = document.getElementById('notifToggle');
+            const label = document.getElementById('notifLabel');
+            const slider = document.getElementById('notifSlider');
+
+            toggle.checked = esActivo;
+            label.textContent = esActivo ? 'Activo' : 'Inactivo';
+            label.style.color = esActivo ? '#10b981' : '#ef4444';
+            slider.style.background = esActivo ? '#10b981' : '#ccc';
+
         } catch (err) {
             console.error(err);
         }
