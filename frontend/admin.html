@@ -229,7 +229,11 @@
             transform: translateX(18px);
         }
 
-        #notifToggle:checked + #notifSlider {
+        #notifSlider {
+            background: #ccc;
+        }
+
+        #notifSlider.active {
             background: #10b981;
         }
 
@@ -243,9 +247,10 @@
             background: white;
             border-radius: 50%;
             transition: 0.3s;
+            transform: translateX(0);
         }
 
-        #notifToggle:checked + #notifSlider::before {
+        #notifSlider.active::before {
             transform: translateX(18px);
         }
 
@@ -472,12 +477,18 @@
             if (datos.token) {
                 sessionStorage.setItem('adminToken', datos.token);
                 logueado = true;
+
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminScreen').style.display = 'block';
+
                 cargarTurnos();
                 cargarBloqueados();
                 cargarModo();
                 cargarNotif()
+
+                setTimeout(() => {
+                    cargarNotif();
+                }, 50);
             } else {
                 document.getElementById('loginError').textContent = 'Contraseña incorrecta';
             }
@@ -625,43 +636,31 @@
         const toggle = document.getElementById('notifToggle');
         const label = document.getElementById('notifLabel');
         const slider = document.getElementById('notifSlider');
+
         toggle.checked = esActivo;
+
         label.textContent = esActivo ? 'Activo' : 'Inactivo';
         label.style.color = esActivo ? '#10b981' : '#ef4444';
-        slider.style.background = esActivo ? '#10b981' : '#ccc';
-        slider.style.setProperty('--translate', esActivo ? '18px' : '0px');
+
+        slider.classList.toggle('active', esActivo);
     }
 
     async function cargarNotif() {
-        try {
-            const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif');
-            const datos = await res.json();
-            const esActivo = datos.notif === 'activo';
-
-            const toggle = document.getElementById('notifToggle');
-            const label = document.getElementById('notifLabel');
-            const slider = document.getElementById('notifSlider');
-
-            toggle.checked = esActivo;
-            label.textContent = esActivo ? 'Activo' : 'Inactivo';
-            label.style.color = esActivo ? '#10b981' : '#ef4444';
-            slider.style.background = esActivo ? '#10b981' : '#ccc';
-
-        } catch (err) {
-            console.error(err);
-        }
+        const res = await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif');
+        const datos = await res.json();
+        actualizarUINotif(datos.notif === 'activo');
     }
 
     async function cambiarNotif() {
-        const esActivo = document.getElementById('notifToggle').checked;
-        const notif = esActivo ? 'activo' : 'inactivo';
-        document.getElementById('notifLabel').textContent = esActivo ? 'Activo' : 'Inactivo';
-        document.getElementById('notifLabel').style.color = esActivo ? '#10b981' : '#ef4444';
+        const toggle = document.getElementById('notifToggle');
+        const esActivo = toggle.checked;
+
+        actualizarUINotif(esActivo);
 
         await fetch('https://barberia-elite-production.up.railway.app/api/turnos/config/notif', {
             method: 'POST',
             headers: authHeaders(),
-            body: JSON.stringify({ notif })
+            body: JSON.stringify({ notif: esActivo ? 'activo' : 'inactivo' })
         });
     }
 
@@ -738,6 +737,10 @@
                     cargarBloqueados();
                     cargarModo();
                     cargarNotif();
+
+                    setTimeout(() => {
+                        cargarNotif();
+                    }, 50);
                 }
             });
         }
